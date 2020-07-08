@@ -1,0 +1,10 @@
+REM extract 30Hz frames
+ffmpeg -i %1.mp4 -vf fps=30 out%%05d.png
+
+
+REM extract multiple time segments (vsync 0 means pass frame time stamps through to the muxer)
+ffmpeg -i %1.mp4 -vf fps=30 select='between(t,2,6)+between(t,15,24)' -vsync 0 out%%05d.png
+
+
+REM scale a GIF and reduce it's colour palette
+convert %1.gif -coalesce -scale 700x525 -fuzz 2% +dither -remap %1.gif[0] -layers Optimize %2.gif
